@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Ficha Jujutsu RPG</title>
+
+<style>
+:root {
+    --main-color: #6b7280;
+    --bg1: #111;
+    --bg2: #1f2937;
+}
+
+body {
+    margin:0;
+    font-family:Arial;
+    background:linear-gradient(to bottom,var(--bg1),var(--bg2));
+    color:white;
+    transition:0.4s;
+}
+
+.container {
+    max-width:700px;
+    margin:30px auto;
+    background:#1c1c1c;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 0 25px var(--main-color);
+}
+
+h1 { text-align:center; color:var(--main-color); }
+
+input, select, button, textarea {
+    width:95%;
+    padding:7px;
+    margin:5px auto;
+    display:block;
+    border-radius:5px;
+    border:none;
+    text-align:center;
+}
+
+button { cursor:pointer; }
+
+.bar-container {
+    background:#333;
+    border-radius:8px;
+    overflow:hidden;
+    margin:10px 0;
+}
+
+.bar { height:20px; transition:0.3s; }
+.hp { background:#ef4444; }
+.ce { background:#3b82f6; }
+.reversa { background:#a855f7; }
+
+.tecnicas {
+    margin-top:15px;
+    background:#222;
+    padding:10px;
+    border-radius:8px;
+}
+
+/* Black Flash Panel */
+
+.blackflash-panel {
+    position:fixed;
+    left:0;
+    top:25%;
+    background:#111;
+    padding:12px;
+    border-top-right-radius:10px;
+    border-bottom-right-radius:10px;
+    box-shadow:0 0 20px red;
+}
+
+.flash-effect {
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background:radial-gradient(circle, rgba(255,0,0,0.9) 0%, rgba(0,0,0,1) 60%);
+    animation:flashAnim 0.6s ease-out forwards;
+}
+
+@keyframes flashAnim {
+    0% { opacity:1; }
+    100% { opacity:0; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="blackflash-panel">
+    <button onclick="ativarBlackFlash()">BLACK FLASH</button>
+    <p id="bfContador" style="color:red;">0</p>
+    <button onclick="resetBlackFlash()">Reset BF</button>
+    <button onclick="avancarTurno()">Avançar Turno</button>
+    <button onclick="resetTurno()">Reset Turno</button>
+    <p id="turnoTexto">Turno: 1</p>
+</div>
+
+<div class="container">
+
+<h1>Ficha Jujutsu RPG</h1>
+
+<label>Grau:</label>
+<select id="grau" onchange="mudarTema()">
+<option value="4">Grade 4</option>
+<option value="3">Grade 3</option>
+<option value="2.5">Semi Grade 2</option>
+<option value="2">Grade 2</option>
+<option value="1.5">Semi Grade 1</option>
+<option value="1">Grade 1</option>
+<option value="E">Grade Especial</option>
+</select>
+
+<h3>Atributos</h3>
+<div id="atributos"></div>
+
+<p>Ataque Base: <span id="atkBase">20</span></p>
+
+<h3>Status</h3>
+
+Vida: <span id="vidaTexto"></span>
+<div class="bar-container"><div id="hpBar" class="bar hp"></div></div>
+
+Energia Amaldiçoada: <span id="ceTexto"></span>
+<div class="bar-container"><div id="ceBar" class="bar ce"></div></div>
+
+Energia Reversa:
+<div class="bar-container"><div id="reBar" class="bar reversa"></div></div>
+<button onclick="restaurarReversa()">Reset Energia Reversa</button>
+
+<button onclick="desbloquearReversa()">Desbloquear Energia Reversa</button>
+<button onclick="curar()">Curar (usa reversa)</button>
+
+<h3>Controle de Combate</h3>
+
+Dano Recebido:
+<input type="number" id="danoInput">
+<button onclick="receberDano()">Aplicar Dano</button>
+
+CE Gasta:
+<input type="number" id="ceInput">
+<button onclick="gastarCE()">Gastar CE</button>
+
+<div class="tecnicas">
+<h3>Área de Técnicas</h3>
+<textarea style="width:100%; height:300px;"></textarea>
+</div>
+
+</div>
+
+<script>
+
+let atributos = {for:10, agi:10, con:10, ce:10, tec:10, men:10};
+
+let vidaBase, ceBase;
+let vidaMax, vidaAtual;
+let ceMax, ceAtual;
+let reversaMax=60, reversaAtual=0;
+let reversaLiberada=false;
+
+let contadorBlackFlash=0;
+let buffTurnos=0;
+let turno=1;
+
+function renderAtributos(){
+    let div=document.getElementById("atributos");
+    div.innerHTML="";
+    for(let stat in atributos){
+        div.innerHTML+=`
+        ${stat.toUpperCase()}
+        <button onclick="alterar('${stat}',-1)">-</button>
+        <span>${atributos[stat]}</span>
+        <button onclick="alterar('${stat}',1)">+</button><br>`;
+    }
+}
+
+function alterar(stat,valor){
+    atributos[stat]+=valor;
+    if(atributos[stat]<0) atributos[stat]=0;
+    calcular();
+}
+
+function calcular(){
+    vidaBase=20+(atributos.con*5);
+    ceBase=15+(atributos.ce*5);
+
+    vidaMax=vidaBase;
+    ceMax=ceBase;
+
+    vidaAtual=vidaMax;
+    ceAtual=ceMax;
+
+    atualizarBarras();
+}
+
+function atualizarBarras(){
+    document.getElementById("vidaTexto").innerText=Math.floor(vidaAtual)+" / "+Math.floor(vidaMax);
+    document.getElementById("ceTexto").innerText=Math.floor(ceAtual)+" / "+Math.floor(ceMax);
+
+    document.getElementById("hpBar").style.width=(vidaAtual/vidaMax*100)+"%";
+    document.getElementById("ceBar").style.width=(ceAtual/ceMax*100)+"%";
+    document.getElementById("reBar").style.width=(reversaAtual/reversaMax*100)+"%";
+
+    document.getElementById("atkBase").innerText=atributos.for+atributos.tec;
+
+    renderAtributos();
+}
+
+/* COMBATE */
+
+function receberDano(){
+    let dano=parseInt(document.getElementById("danoInput").value)||0;
+    vidaAtual-=dano;
+    if(vidaAtual<0) vidaAtual=0;
+    atualizarBarras();
+}
+
+function gastarCE(){
+    let gasto=parseInt(document.getElementById("ceInput").value)||0;
+    ceAtual-=gasto;
+    if(ceAtual<0) ceAtual=0;
+    atualizarBarras();
+}
+
+/* ENERGIA REVERSA */
+
+function desbloquearReversa(){
+    let senha=prompt("Senha:");
+    if(senha==="RCT2024"){
+        reversaLiberada=true;
+        reversaAtual=reversaMax;
+        atualizarBarras();
+    }
+}
+
+function restaurarReversa(){
+    if(reversaLiberada){
+        reversaAtual=reversaMax;
+        atualizarBarras();
+    }
+}
+
+function curar(){
+    if(!reversaLiberada) return;
+
+    if(reversaAtual>0){
+        vidaAtual+=20;
+        if(vidaAtual>vidaMax) vidaAtual=vidaMax;
+        reversaAtual-=20;
+        if(reversaAtual<0) reversaAtual=0;
+        atualizarBarras();
+    }
+}
+
+/* BLACK FLASH */
+
+function ativarBlackFlash(){
+    contadorBlackFlash++;
+    document.getElementById("bfContador").innerText=contadorBlackFlash;
+
+    buffTurnos=2;
+
+    vidaMax=vidaBase*1.2;
+    ceMax=ceBase*1.2;
+
+    ceAtual=ceMax;
+    vidaAtual+=vidaMax*0.2;
+    if(vidaAtual>vidaMax) vidaAtual=vidaMax;
+
+    atualizarBarras();
+
+    let flash=document.createElement("div");
+    flash.classList.add("flash-effect");
+    document.body.appendChild(flash);
+    setTimeout(()=>flash.remove(),600);
+}
+
+function avancarTurno(){
+    turno++;
+    document.getElementById("turnoTexto").innerText="Turno: "+turno;
+
+    if(buffTurnos>0){
+        buffTurnos--;
+        if(buffTurnos===0){
+            vidaMax=vidaBase;
+            ceMax=ceBase;
+            if(vidaAtual>vidaMax) vidaAtual=vidaMax;
+            if(ceAtual>ceMax) ceAtual=ceMax;
+            atualizarBarras();
+        }
+    }
+}
+
+function resetTurno(){
+    turno=1;
+    document.getElementById("turnoTexto").innerText="Turno: 1";
+}
+
+function resetBlackFlash(){
+    contadorBlackFlash=0;
+    document.getElementById("bfContador").innerText=0;
+}
+
+/* TEMAS + ENERGIA REVERSA POR GRAU */
+
+function mudarTema(){
+    let grau=document.getElementById("grau").value;
+    let root=document.documentElement;
+
+    switch(grau){
+        case "4": root.style.setProperty('--main-color','#6b7280'); reversaMax=60; break;
+        case "3": root.style.setProperty('--main-color','#3b82f6'); reversaMax=60; break;
+        case "2.5": root.style.setProperty('--main-color','#22c55e'); reversaMax=60; break;
+        case "2": root.style.setProperty('--main-color','#16a34a'); reversaMax=60; break;
+        case "1.5": root.style.setProperty('--main-color','#f97316'); reversaMax=60; break;
+        case "1": root.style.setProperty('--main-color','#fb923c'); reversaMax=80; break;
+        case "E": root.style.setProperty('--main-color','#a855f7'); reversaMax=100; break;
+    }
+
+    if(reversaAtual>reversaMax) reversaAtual=reversaMax;
+    atualizarBarras();
+}
+
+renderAtributos();
+calcular();
+mudarTema();
+
+</script>
+
+</body>
+</html>
