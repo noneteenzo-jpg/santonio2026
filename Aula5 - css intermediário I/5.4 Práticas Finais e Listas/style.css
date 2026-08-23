@@ -1,0 +1,35 @@
+ul {
+    list-style-type: none;
+}
+
+button:hover {
+    background-color: rgb(162, 162, 255);
+}
+
+div {
+    text-shadow: 20px;
+    box-shadow: rgb(13, 255, 5);
+}
+
+.fundocartao {
+    background-color: blueviolet;
+    height: 600px;
+    width: 300px;
+    margin: 20px;
+}
+
+
+img {
+    height: 250px;
+    margin: 40px;
+    border-radius: 30px;
+
+}
+
+.texto {
+    text-align: center;
+}
+
+* {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
