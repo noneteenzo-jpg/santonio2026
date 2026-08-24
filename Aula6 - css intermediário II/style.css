@@ -4,7 +4,8 @@
 
 body{
     font-family:'Times New Roman', Times, serif;
-    background-color: rgb(208, 245, 245);
+    background: #9b2a2a;
+background: linear-gradient(90deg, rgba(155, 42, 42, 1) 0%, rgba(117, 87, 199, 1) 50%, rgba(20, 204, 250, 1) 100%);
 
     display: flex;
     justify-content: center;
