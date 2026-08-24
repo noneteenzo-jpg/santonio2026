@@ -1,0 +1,96 @@
+*{
+    box-sizing: border-box;
+}
+
+body{
+    font-family:'Times New Roman', Times, serif;
+    background-color: rgb(208, 245, 245);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+}
+/*CONCEITO FUNDAMENTAL*/
+
+.Container{
+    width: 400px;
+    margin: 50px;
+    padding: 30px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
+}
+input,
+select{
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+h1{
+    text-align: center;
+    margin-bottom: 25px;
+}
+.subtitle{
+    margin: 0 0 30px;
+
+    text-align: center;
+
+    color: #666;
+
+    font-size: 14px;
+}
+.campo{
+    margin-bottom: 18px;
+}
+.campo > label{
+    display: block;
+
+    margin-bottom: 6px;
+
+    font-weight: bold;
+
+    color: #333;
+}
+label{
+    font-weight: bold;
+}
+button{
+    width: 100px;
+ padding: 12px;
+ border: none;
+ border-radius: 6px;
+ cursor: pointer;
+
+}
+
+button:hover{
+    opacity: 0.8;
+
+}
+input:focus{
+    outline: none;
+    border: 2px solid;
+}
+.genero{
+    width: auto;
+
+   cursor: pointer;
+}
+.genero input{
+    cursor: pointer;
+}
+.termos{
+    width: auto;
+    margin: 4px;
+    
+
+}
+.termos input{
+    cursor: pointer;
+}
+.termos label{
+    cursor: pointer;
+}
