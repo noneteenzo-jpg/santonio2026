@@ -1,0 +1,63 @@
+
+
+//8 Página HTML que recebe o placar de um jogo de futebol
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Placar de Futebol</title>
+</head>
+
+<body>
+
+<h1>Resultado do Jogo</h1>
+
+<form method="post">
+
+    <label>Nome do 1º time:</label>
+    <input type="text" name="time1" required>
+    <br><br>
+
+    <label>Gols do 1º time:</label>
+    <input type="number" name="gols1" min="0" required>
+    <br><br>
+
+    <label>Nome do 2º time:</label>
+    <input type="text" name="time2" required>
+    <br><br>
+
+    <label>Gols do 2º time:</label>
+    <input type="number" name="gols2" min="0" required>
+    <br><br>
+
+    <button type="submit">Ver resultado</button>
+
+</form>
+
+<?php
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $time1 = $_POST["time1"];
+    $time2 = $_POST["time2"];
+
+    $gols1 = (int) $_POST["gols1"];
+    $gols2 = (int) $_POST["gols2"];
+
+    echo "<h2>Placar</h2>";
+
+    echo "$time1 $gols1 x $gols2 $time2<br><br>";
+
+    if ($gols1 == $gols2) {
+        echo "Houve empate!";
+    } elseif ($gols1 > $gols2) {
+        echo "Vitória do 1º time: $time1";
+    } else {
+        echo "Vitória do 2º time: $time2";
+    }
+}
+
+?>
+
+</body>
+</html>

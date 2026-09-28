@@ -1,0 +1,126 @@
+//1 Qual é a função de uma condição dentro da programação?
+
+Uma condição permite que o programa tome decisões de acordo com uma situação.
+
+Por exemplo:
+
+$idade = 18;
+
+if ($idade >= 18) {
+    echo "Maior de idade";
+}
+
+Nesse caso, o programa verifica se a idade é maior ou igual a 18. Se for verdadeira, executa o código dentro do if.
+
+2 Explique sobre o bloco if else
+
+O if executa um código quando uma condição é verdadeira. O else executa outro código quando a condição é falsa.
+
+Exemplo:
+
+$idade = 16;
+
+if ($idade >= 18) {
+    echo "Maior de idade";
+} else {
+    echo "Menor de idade";
+}
+
+Como 16 >= 18 é falso, será exibido:
+
+Menor de idade
+
+Também podemos utilizar else if para testar várias condições:
+
+$nota = 7;
+
+if ($nota >= 9) {
+    echo "Excelente";
+} elseif ($nota >= 6) {
+    echo "Aprovado";
+} else {
+    echo "Reprovado";
+}
+
+3 Qual é a diferença entre if e switch?
+if
+
+É mais utilizado quando precisamos verificar condições, principalmente comparações.
+
+$idade = 20;
+
+if ($idade >= 18) {
+    echo "Adulto";
+}
+
+switch
+
+É utilizado principalmente quando queremos comparar uma variável com vários valores específicos.
+
+$opcao = 2;
+
+switch ($opcao) {
+    case 1:
+        echo "Cadastrar";
+        break;
+
+    case 2:
+        echo "Consultar";
+        break;
+
+    case 3:
+        echo "Sair";
+        break;
+
+    default:
+        echo "Opção inválida";
+}
+
+Resumindo:
+
+    if: melhor para condições e comparações.
+
+    switch: melhor quando temos várias possibilidades para uma mesma expressão.
+
+4 Onde aplicamos os comandos de fluxo de controle for e while?
+
+Eles são utilizados para criar repetições, ou seja, executar um determinado bloco de código várias vezes.
+for
+
+É muito utilizado quando sabemos quantas vezes queremos repetir.
+
+for ($i = 1; $i <= 10; $i++) {
+    echo $i . "<br>";
+}
+
+Esse código mostra os números de 1 a 10.
+while
+
+É utilizado quando a repetição depende de uma condição.
+
+$i = 1;
+
+while ($i <= 10) {
+    echo $i . "<br>";
+    $i++;
+}
+
+5 Qual é a função do laço de repetição na programação?
+
+O laço de repetição serve para executar o mesmo bloco de código várias vezes, evitando escrever o mesmo código repetidamente.
+
+Por exemplo, sem um laço:
+
+echo "1<br>";
+echo "2<br>";
+echo "3<br>";
+echo "4<br>";
+echo "5<br>";
+
+Com for:
+
+for ($i = 1; $i <= 5; $i++) {
+    echo $i . "<br>";
+}
+
+O segundo exemplo é mais simples e facilita a manutenção do programa.
