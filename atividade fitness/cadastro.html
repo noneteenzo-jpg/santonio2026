@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova matrícula | Kemel Fitness Manager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header class="topbar">
+        <a class="brand" href="index.html"><span class="brand-mark">K</span><span>KEMEL
+                <strong>FITNESS</strong><small>MANAGER</small></span></a>
+        <a class="back-link" href="index.html">← Voltar ao painel</a>
+    </header>
+    <main class="container form-container">
+        <div class="page-intro">
+            <p class="eyebrow">GESTÃO DE ALUNOS / MATRÍCULA</p>
+            <h1>Nova <span>matrícula.</span></h1>
+            <p class="muted">Preencha os dados abaixo para registrar a matrícula e calcular a mensalidade.</p>
+        </div>
+        <form action="processar.php" method="POST" class="form-card">
+            <div class="form-section-title"><span class="step-number">01</span>
+                <div>
+                    <h2>Dados do aluno</h2>
+                    <p class="muted small">Todos os campos são obrigatórios.</p>
+                </div>
+            </div>
+            <div class="form-grid">
+                <div class="field field-full"><label for="nome">Nome completo</label><input id="nome" name="nome"
+                        type="text" placeholder="Ex.: Maria da Silva" minlength="3" maxlength="120" autocomplete="name"
+                        required></div>
+                <div class="field"><label for="idade">Idade</label><input id="idade" name="idade" type="number"
+                        placeholder="Mínimo 18 anos" min="18" max="120" required><small>É necessário ter 18 anos ou
+                        mais.</small></div>
+                <div class="field"><label for="telefone">Telefone</label><input id="telefone" name="telefone" type="tel"
+                        placeholder="(41) 99999-9999" minlength="8" maxlength="20" autocomplete="tel" required></div>
+                <div class="field"><label for="email">E-mail</label><input id="email" name="email" type="email"
+                        placeholder="aluno@email.com" maxlength="150" autocomplete="email" required></div>
+                <div class="field"><label for="data_matricula">Data da matrícula</label><input id="data_matricula"
+                        name="data_matricula" type="date" required></div>
+            </div>
+            <div class="form-divider"></div>
+            <div class="form-section-title"><span class="step-number">02</span>
+                <div>
+                    <h2>Plano e pagamento</h2>
+                    <p class="muted small">Selecione o plano e a forma de pagamento.</p>
+                </div>
+            </div>
+            <fieldset class="field-set">
+                <legend>Plano mensal</legend>
+                <div class="choice-grid">
+                    <label class="choice-card"><input type="radio" name="plano" value="basico" required><span
+                            class="choice-content"><strong>Básico</strong><small>Musculação</small><b>R$
+                                89,90</b></span></label>
+                    <label class="choice-card"><input type="radio" name="plano" value="plus"><span
+                            class="choice-content"><strong>Plus</strong><small>Musculação e aulas coletivas</small><b>R$
+                                129,90</b></span></label>
+                    <label class="choice-card"><input type="radio" name="plano" value="premium"><span
+                            class="choice-content"><strong>Premium</strong><small>Todas as modalidades</small><b>R$
+                                179,90</b></span></label>
+                </div>
+            </fieldset>
+            <fieldset class="field-set payment-set">
+                <legend>Forma de pagamento</legend>
+                <div class="payment-options"><label class="payment-option"><input type="radio" name="pagamento"
+                            value="pix" required><span><strong>PIX</strong><small>10% de
+                                desconto</small></span></label><label class="payment-option"><input type="radio"
+                            name="pagamento" value="cartao"><span><strong>Cartão</strong><small>Valor integral antes do
+                                desconto por idade</small></span></label></div>
+            </fieldset>
+            <div class="notice"><span>ⓘ</span>
+                <p>Alunos com 60 anos ou mais recebem 15% de desconto. Os descontos não são acumulados: o sistema aplica
+                    somente o maior percentual.</p>
+            </div>
+            <div class="form-actions"><a class="button button-secondary" href="index.html">Cancelar</a><button
+                    class="button button-primary" type="submit">Calcular e gerar comprovante →</button></div>
+        </form>
+        <p class="privacy-note">Protótipo acadêmico: os dados não são salvos em banco de dados.</p>
+    </main>
+    <footer class="footer"><span>© 2026 Kemel Fitness Manager</span><span>Sistema interno de gestão de matrículas</span>
+    </footer>
+    <script>
+        // Sugere a data de hoje, mantendo o campo editável.
+        const campoData = document.getElementById('data_matricula');
+        const hoje = new Date();
+        campoData.value = `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, '0')}-${String(hoje.getDate()).padStart(2, '0')}`;
+        campoData.max = campoData.value;
+    </script>
+</body>
+
+</html>
